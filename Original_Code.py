@@ -1,6 +1,7 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.signal as signal
 
 mydata = [[000 for x in range(150)] for y in range(10000)]  # col by row
 count = 0
@@ -31,8 +32,10 @@ mode='r', encoding='utf-8' ) as f:
                 count=count+1  ## stored a good time value, so increment the counter
         if jcount >148 :  # never more than 150 runs, if we are still going something wrong
                 break
-           
+        b,a=signal.bessel(2,1,btype='Low',norm='Mag',fs=2500)  
+        print(a,b)    
 my_data=np.array(mydata)
+
 
 mpl.rcParams['figure.figsize'] = [12, 6]
 fig, ax = plt.subplots()
@@ -42,3 +45,4 @@ ax.plot(my_data[1:1000,1:10])     # plotting only the first 1000 ADC data points
                                                      # there is a total of 2100 ADC voltage vs time points for 61 runs in the data file - only plotting a subset
 plt.savefig("first 10 runs only.png")
 plt.show()
+
