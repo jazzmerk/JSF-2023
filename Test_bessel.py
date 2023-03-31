@@ -8,7 +8,7 @@ filter_data = [[000 for x in range(150)] for y in range(10000)]
 count =1
 jcount=1
 
-b,a=signal.bessel(2,1,btype='Low',norm='Mag',fs=1000000)
+b,a=signal.bessel(1,2500,btype='Low',norm='mag',fs=1000000)
 
 
 
@@ -42,8 +42,8 @@ mode='r', encoding='utf-8' ) as f:
         
          
 my_data=np.array(my_data)  
-filter_data = signal.lfilter(b, a,my_data)
-#print("this is filtered sample # ", count, output)
+filter_data = signal.lfilter(b, a,my_data,axis=0)
+print(filter_data)
 
 
 mpl.rcParams['figure.figsize'] = [12, 6]
