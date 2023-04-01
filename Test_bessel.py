@@ -3,14 +3,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal as signal
 
-my_data = [[000 for x in range(150)] for y in range(10000)]   # col by row
-filter_data = [[000 for x in range(150)] for y in range(10000)] 
+
+max_num_of_runs=150
+total_num_samples=10000
+min_samples_per_run=2000
+
+my_data = [[000 for x in range(max_num_of_runs)] for y in range(total_num_samples)]  # col by row
+filter_data = [[000 for x in range(max_num_of_runs)] for y in range(total_num_samples)] 
 count =1
 jcount=1
+
 filter_order=2
 critical_freq=2500
-fs=1000000 #sampling frequency
-numerator,denominator=signal.bessel(filter_order,critical_freq,btype='Low',norm='mag',fs=1000000) #This creates a digital Bessel filter.It returnsthe numerator and denominator polynomials of filter function
+sampling_freq=1000000 #sampling frequency
+numerator,denominator=signal.bessel(filter_order,critical_freq,btype='Low',norm='mag',fs=sampling_freq) #This creates a digital Bessel filter.It returns the numerator and denominator polynomials of filter function
 #print(numerator,denoominator)# to check if filter created correctly
 
 
@@ -32,14 +38,14 @@ mode='r', encoding='utf-8' ) as f:
             if test < -2000 :   ## the end of a run is shown by a negative large number that also indicates number of triggers received
                 if count > 100 : # this is to eliminate the blank runs if we have several -2xxxs in a row, we got a trigger too soon and no data was taken
                     jcount=jcount+1
-                    print ("this is run # ", jcount, count, test)
+                    #print ("this is run # ", jcount, count, test)
                     test =0 ## reset both counters cause starting a new run
                     count=0
                              
             if test > -1999 :  ##  this is normal data stored in mydata array with first column the time index 1 to ~2100 time values, and the 2nd col is the run # usually about 50 - 100
                 (my_data[count] [jcount])=test
                 count=count+1  ## stored a good time value, so increment the counter
-        if jcount >148 :  # never more than 150 runs, if we are still going something wrong
+        if jcount >(max_num_of_runs):  # never more than 150 runs, if we are still going something wrong
                 break
         
          
