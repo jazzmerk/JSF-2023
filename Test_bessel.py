@@ -7,9 +7,11 @@ my_data = [[000 for x in range(150)] for y in range(10000)]   # col by row
 filter_data = [[000 for x in range(150)] for y in range(10000)] 
 count =1
 jcount=1
-
-b,a=signal.bessel(1,2500,btype='Low',norm='mag',fs=1000000)
-
+filter_order=2
+critical_freq=2500
+fs=1000000 #sampling frequency
+numerator,denominator=signal.bessel(filter_order,critical_freq,btype='Low',norm='mag',fs=1000000) #This creates a digital Bessel filter.It returnsthe numerator and denominator polynomials of filter function
+#print(numerator,denoominator)# to check if filter created correctly
 
 
 
@@ -42,8 +44,8 @@ mode='r', encoding='utf-8' ) as f:
         
          
 my_data=np.array(my_data)  
-filter_data = signal.lfilter(b, a,my_data,axis=0)
-print(filter_data)
+filter_data = signal.lfilter(numerator, denominator,my_data,axis=0)#lfilter actually runs signal through whatever filter is created
+
 
 
 mpl.rcParams['figure.figsize'] = [12, 6]
